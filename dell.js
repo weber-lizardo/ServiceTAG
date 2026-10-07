@@ -9,6 +9,14 @@ const MESES = {
   jul: 7, ago: 8, aug: 8, set: 9, sep: 9, out: 10, oct: 10, nov: 11, dez: 12, dec: 12,
 };
 
+// Página de bloqueio da proteção anti-robô (Akamai) da Dell.
+class BloqueioDell extends Error {
+  constructor() {
+    super('Acesso bloqueado pela Dell (Access Denied). Rode a consulta a partir de outra rede.');
+    this.bloqueio = true;
+  }
+}
+
 let browserPromise = null;
 
 function getBrowser() {
@@ -16,6 +24,8 @@ function getBrowser() {
     browserPromise = chromium
       .launch({
         headless: process.env.HEADLESS !== 'false',
+        // Ex.: BROWSER_CHANNEL=msedge ou chrome para usar o navegador instalado na máquina
+        channel: process.env.BROWSER_CHANNEL || undefined,
         executablePath: process.env.CHROMIUM_PATH || undefined,
         args: ['--disable-blink-features=AutomationControlled'],
       })
@@ -50,6 +60,9 @@ async function consultar(tag) {
     userAgent: USER_AGENT,
     viewport: { width: 1366, height: 900 },
   });
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+  });
   const page = await context.newPage();
 
   // Guarda respostas JSON de garantia que o próprio site carrega.
@@ -65,6 +78,7 @@ async function consultar(tag) {
 
   try {
     await page.goto(HOME, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await verificarBloqueio(page);
     await aceitarCookies(page);
 
     // Campo "Identifique um produto ou pergunte ao suporte"
@@ -84,6 +98,7 @@ async function consultar(tag) {
     }
 
     await page.waitForLoadState('networkidle', { timeout: 30000 }).catch(() => {});
+    await verificarBloqueio(page);
     await aceitarCookies(page);
 
     const dispositivo = await extrairDispositivo(page);
@@ -97,6 +112,12 @@ async function consultar(tag) {
   } finally {
     await context.close();
   }
+}
+
+async function verificarBloqueio(page) {
+  const titulo = await page.title().catch(() => '');
+  const h1 = await page.locator('h1').first().innerText({ timeout: 2000 }).catch(() => '');
+  if (/access denied/i.test(titulo) || /access denied/i.test(h1)) throw new BloqueioDell();
 }
 
 async function aceitarCookies(page) {
@@ -136,7 +157,7 @@ async function extrairDispositivo(page) {
       .innerText({ timeout: 3000 })
       .catch(() => '');
     const limpo = texto.replace(/\s+/g, ' ').trim();
-    if (limpo && !/^suporte$|identifique|bem-vindo/i.test(limpo)) return limpo;
+    if (limpo && !/^suporte$|identifique|bem-vindo|access denied/i.test(limpo)) return limpo;
   }
   // Ex.: "Suporte para Latitude 5420 | Visão geral | Dell Brasil"
   const titulo = await page.title();

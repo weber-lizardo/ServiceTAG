@@ -41,6 +41,24 @@ substituem esses valores. A secret key nunca sai do GitHub Actions.
    (ou manualmente em *Actions > Publicar no GitHub Pages > Run workflow*).
 3. O endereço fica em `https://<usuario>.github.io/ServiceTAG/`.
 
+## Bloqueio da Dell (Access Denied)
+
+A Dell bloqueia acessos vindos de datacenters, incluindo os servidores do GitHub Actions.
+Quando isso acontece, o workflow falha com "Acesso bloqueado pela Dell" e as tags continuam pendentes.
+A solução é rodar a consulta num computador da sua rede, com um **self-hosted runner**:
+
+1. No computador (Windows, Linux ou Mac, que fique ligado), instale o Node.js 18+ e o Git.
+2. No GitHub: **Settings > Actions > Runners > New self-hosted runner** e siga os comandos mostrados.
+   No Windows, aceite instalar como serviço.
+3. Em **Settings > Secrets and variables > Actions > Variables**, crie:
+   - `RUNNER` = `self-hosted`
+   - `BROWSER_CHANNEL` = `msedge` (Windows, usa o Edge já instalado) ou `chrome` (se o Chrome estiver instalado).
+     Sem essa variável, o Chromium do Playwright é baixado automaticamente.
+   - Opcional: `HEADLESS` = `false` para abrir a janela do navegador (ajuda se a Dell ainda bloquear).
+
+Alternativa sem runner: no próprio computador, copie `.env.example` para `.env`, rode `npm install`,
+`npx playwright install chromium` e `npm run consultar` (pode ser agendado no Agendador de Tarefas).
+
 ## Tabela `servicetag_service_tags`
 
 Padrão do projeto: toda tabela criada no Supabase começa com `servicetag_`.

@@ -40,6 +40,11 @@ async function main() {
       };
       console.log(`[${tag}] ${r.dispositivo} | ${r.texto} | ${r.status}`);
     } catch (err) {
+      if (err.bloqueio) {
+        // Mantém as tags pendentes para a próxima execução, de uma rede não bloqueada.
+        await fecharBrowser();
+        throw err;
+      }
       falhas++;
       campos = { situacao: 'erro', erro: err.message.slice(0, 500) };
       console.error(`[${tag}] erro: ${err.message}`);

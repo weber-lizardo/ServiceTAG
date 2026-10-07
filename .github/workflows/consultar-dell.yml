@@ -11,11 +11,19 @@ concurrency:
 
 jobs:
   consultar:
-    runs-on: ubuntu-latest
+    # A Dell bloqueia os IPs do GitHub (Access Denied). Para rodar num computador da
+    # sua rede, instale um self-hosted runner e crie a variável RUNNER=self-hosted.
+    runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
     env:
       SUPABASE_URL: ${{ vars.SUPABASE_URL || 'https://dwjseiqsqjcafkflowkd.supabase.co' }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      # Ex.: BROWSER_CHANNEL=msedge (Windows) usa o Edge instalado em vez de baixar o Chromium
+      BROWSER_CHANNEL: ${{ vars.BROWSER_CHANNEL }}
+      HEADLESS: ${{ vars.HEADLESS || 'true' }}
     steps:
       # Verificação rápida: só instala o navegador se houver tag pendente.
       - name: Verificar tags pendentes
@@ -40,8 +48,9 @@ jobs:
       - if: steps.pendentes.outputs.existe == 'true'
         run: npm ci
 
-      - if: steps.pendentes.outputs.existe == 'true'
-        run: npx playwright install --with-deps chromium
+      - name: Instalar Chromium
+        if: steps.pendentes.outputs.existe == 'true' && vars.BROWSER_CHANNEL == ''
+        run: npx playwright install ${{ runner.os == 'Linux' && '--with-deps' || '' }} chromium
 
       - if: steps.pendentes.outputs.existe == 'true'
         run: node worker.js
