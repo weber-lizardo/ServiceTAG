@@ -35,7 +35,8 @@ visível na página; é normal). Opcionalmente, as variáveis `SUPABASE_URL` e `
 substituem esses valores. A secret key nunca sai do GitHub Actions.
 
 ### 3. GitHub Pages
-1. Em **Settings > Pages**, em *Source*, escolha **GitHub Actions**.
+1. Em **Settings > Pages**, em *Source*, escolha **GitHub Actions** (recomendado).
+   Se ficar em *Deploy from a branch* (raiz), o `index.html` da raiz redireciona para `public/`.
 2. O workflow `.github/workflows/pages.yml` publica a pasta `public/` a cada push na `main` que altere a página
    (ou manualmente em *Actions > Publicar no GitHub Pages > Run workflow*).
 3. O endereço fica em `https://<usuario>.github.io/ServiceTAG/`.
