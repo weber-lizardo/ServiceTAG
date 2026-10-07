@@ -24,10 +24,9 @@ a consulta é feita pelo servidor.
 4. Acesse http://localhost:3000, escolha o local, cole as Service Tags (uma por linha ou separadas por
    vírgula/espaço) e clique em **Consultar e gravar**.
 
-## Tabela `servicetag-service_tags`
+## Tabela `servicetag_service_tags`
 
-Padrão do projeto: toda tabela criada no Supabase começa com `servicetag-`
-(no SQL, use aspas duplas por causa do hífen: `"servicetag-service_tags"`).
+Padrão do projeto: toda tabela criada no Supabase começa com `servicetag_`.
 
 | coluna               | conteúdo                                         |
 |----------------------|--------------------------------------------------|

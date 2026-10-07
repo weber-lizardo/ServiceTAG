@@ -9,7 +9,7 @@ const LOCAIS = [
   'ASES', 'ARC', 'ARF', 'ARS', 'MMN', 'MMO', 'AMC', 'AMS', 'AML',
 ].sort((a, b) => a.localeCompare(b, 'pt-BR'));
 
-const TABELA = 'servicetag-service_tags';
+const TABELA = 'servicetag_service_tags';
 
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
   console.error('Defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY no arquivo .env');
