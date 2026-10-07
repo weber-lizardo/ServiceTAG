@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consulta de Service Tags Dell</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Consulta de Service Tags Dell</h1>
+    <p class="sub">Informe o local e a lista de Service Tags. Cada tag é consultada no
+      <a href="https://www.dell.com/support/home/pt-br" target="_blank" rel="noopener">suporte da Dell</a>
+      e gravada no banco com o dispositivo e a garantia.</p>
+
+    <form id="form">
+      <label for="local">Local</label>
+      <select id="local" required>
+        <option value="">Selecione…</option>
+      </select>
+
+      <label for="tags">Service Tags <span class="dica">(uma por linha, ou separadas por vírgula/espaço)</span></label>
+      <textarea id="tags" rows="8" placeholder="ABC1234&#10;XYZ9876" required></textarea>
+
+      <button type="submit" id="enviar">Consultar e gravar</button>
+      <span id="progresso"></span>
+    </form>
+
+    <section id="secResultado" hidden>
+      <h2>Resultado desta consulta</h2>
+      <div class="tabela"><table>
+        <thead>
+          <tr><th>Local</th><th>Service Tag</th><th>Dispositivo</th><th>Garantia</th><th>Status</th></tr>
+        </thead>
+        <tbody id="resultado"></tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <div class="cabecalho">
+        <h2>Registros gravados</h2>
+        <select id="filtroLocal"><option value="">Todos os locais</option></select>
+      </div>
+      <div class="tabela"><table>
+        <thead>
+          <tr><th>Local</th><th>Service Tag</th><th>Dispositivo</th><th>Garantia</th><th>Status</th><th>Consultado em</th></tr>
+        </thead>
+        <tbody id="registros"></tbody>
+      </table></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
