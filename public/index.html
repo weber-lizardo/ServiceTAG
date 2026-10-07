@@ -11,7 +11,8 @@
     <h1>Consulta de Service Tags Dell</h1>
     <p class="sub">Informe o local e a lista de Service Tags. Cada tag é consultada no
       <a href="https://www.dell.com/support/home/pt-br" target="_blank" rel="noopener">suporte da Dell</a>
-      e gravada no banco com o dispositivo e a garantia.</p>
+      e gravada no banco com o dispositivo e a garantia. As consultas rodam
+      automaticamente a cada ~10 minutos; esta página se atualiza sozinha.</p>
 
     <form id="form">
       <label for="local">Local</label>
@@ -22,19 +23,10 @@
       <label for="tags">Service Tags <span class="dica">(uma por linha, ou separadas por vírgula/espaço)</span></label>
       <textarea id="tags" rows="8" placeholder="ABC1234&#10;XYZ9876" required></textarea>
 
-      <button type="submit" id="enviar">Consultar e gravar</button>
+      <button type="submit" id="enviar">Enviar para consulta</button>
       <span id="progresso"></span>
     </form>
 
-    <section id="secResultado" hidden>
-      <h2>Resultado desta consulta</h2>
-      <div class="tabela"><table>
-        <thead>
-          <tr><th>Local</th><th>Service Tag</th><th>Dispositivo</th><th>Garantia</th><th>Status</th></tr>
-        </thead>
-        <tbody id="resultado"></tbody>
-      </table></div>
-    </section>
 
     <section>
       <div class="cabecalho">
@@ -43,12 +35,14 @@
       </div>
       <div class="tabela"><table>
         <thead>
-          <tr><th>Local</th><th>Service Tag</th><th>Dispositivo</th><th>Garantia</th><th>Status</th><th>Consultado em</th></tr>
+          <tr><th>Local</th><th>Service Tag</th><th>Dispositivo</th><th>Garantia</th><th>Status</th><th>Situação</th><th>Consultado em</th></tr>
         </thead>
         <tbody id="registros"></tbody>
       </table></div>
     </section>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

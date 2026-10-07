@@ -65,3 +65,6 @@ td.tag { font-family: ui-monospace, Consolas, monospace; }
 .Expirada { color: #b42318; }
 .erro { color: #b42318; }
 .pendente { color: #7b8794; }
+.situacao-pendente { color: #b7791f; }
+.situacao-erro { color: #b42318; }
+.situacao-concluida { color: #52606d; }
