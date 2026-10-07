@@ -26,13 +26,13 @@ pelo GitHub Action (service_role key). Ninguém consegue apagar registros pela p
 ### 2. GitHub — variáveis e secret
 Em **Settings > Secrets and variables > Actions**:
 
-| tipo     | nome                        | valor (Supabase > Settings > API) |
-|----------|-----------------------------|-----------------------------------|
-| Variable | `SUPABASE_URL`              | Project URL                       |
-| Variable | `SUPABASE_ANON_KEY`         | anon / publishable key            |
-| Secret   | `SUPABASE_SERVICE_ROLE_KEY` | service_role / secret key         |
+| tipo     | nome                        | valor (Supabase > Settings > API Keys)  |
+|----------|-----------------------------|-----------------------------------------|
+| Secret   | `SUPABASE_SERVICE_ROLE_KEY` | secret key (`sb_secret_...`) ou service_role |
 
-A anon key fica visível na página publicada (é normal); a service_role key nunca sai do GitHub Actions.
+A URL do projeto e a publishable key já estão em `public/config.js` (a publishable key é pública e fica
+visível na página; é normal). Opcionalmente, as variáveis `SUPABASE_URL` e `SUPABASE_ANON_KEY`
+substituem esses valores. A secret key nunca sai do GitHub Actions.
 
 ### 3. GitHub Pages
 1. Em **Settings > Pages**, em *Source*, escolha **GitHub Actions**.

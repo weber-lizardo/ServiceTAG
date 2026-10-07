@@ -24,15 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Gerar config.js com as variáveis do repositório
+      - name: Sobrescrever config.js com as variáveis do repositório (se existirem)
+        if: vars.SUPABASE_URL != '' && vars.SUPABASE_ANON_KEY != ''
         env:
           SUPABASE_URL: ${{ vars.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
-            echo "::error::Defina as variáveis SUPABASE_URL e SUPABASE_ANON_KEY em Settings > Secrets and variables > Actions > Variables"
-            exit 1
-          fi
           cat > public/config.js <<JS
           window.SERVICETAG_CONFIG = {
             supabaseUrl: '${SUPABASE_URL}',
